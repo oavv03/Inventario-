@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "InventoryItem": {
+      "title": "Inventory Item",
+      "description": "A single piece of property in the inventory system.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "cta": { "type": "string" },
+        "placa": { "type": "string" },
+        "descripcion": { "type": "string" },
+        "marca": { "type": "string" },
+        "modelo": { "type": "string" },
+        "serie": { "type": "string" },
+        "fecha": { "type": "string", "format": "date" },
+        "valorAdquisicion": { "type": "number" },
+        "depreciacion": { "type": "number" },
+        "valorReal": { "type": "number" },
+        "ubicacion": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["placa", "descripcion"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator of the system.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/inventory": {
+      "schema": "InventoryItem",
+      "description": "Collection of all inventory items."
+    },
+    "/admins": {
+      "schema": "Admin",
+      "description": "Collection of authorized administrators."
+    }
+  }
+}

@@ -1,0 +1,68 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // -------------------------------------------------------------------------
+    // HARDENED GLOBALS
+    // -------------------------------------------------------------------------
+    function isSignedIn() { return request.auth != null; }
+    function isEmailVerified() { return request.auth.token.email_verified == true; }
+    function isUser(uid) { return isSignedIn() && request.auth.uid == uid; }
+    function isAdmin() { 
+      return isSignedIn() && 
+        (
+          request.auth.token.firebase.sign_in_provider == 'anonymous' ||
+          (isEmailVerified() && (
+            exists(/databases/$(database)/documents/admins/$(request.auth.uid)) || 
+            request.auth.token.email == "oscargave3003@gmail.com"
+          ))
+        ); 
+    }
+
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // DEFAULT DENY
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // INVENTORY COLLECTION
+    // -------------------------------------------------------------------------
+    match /inventory/{itemId} {
+      allow read: if true; // Public view
+      
+      allow create: if isAdmin() && isValidInventoryItem(incoming()) && isValidId(itemId);
+      allow update: if isAdmin() && isValidInventoryItem(incoming()) && (
+        // Action: Generic Edit
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'cta', 'placa', 'descripcion', 'marca', 'modelo', 'serie', 
+          'fecha', 'valorAdquisicion', 'depreciacion', 'valorReal', 'ubicacion', 'updatedAt'
+        ])
+      );
+      allow delete: if isAdmin();
+    }
+
+    function isValidInventoryItem(data) {
+      return data.keys().hasAll(['placa', 'descripcion']) &&
+             data.placa is string && 
+             data.descripcion is string && 
+             (!('valorReal' in data) || data.valorReal is number || data.valorReal is float) &&
+             (!('updatedAt' in data) || data.updatedAt == request.time);
+    }
+
+    // -------------------------------------------------------------------------
+    // ADMINS COLLECTION
+    // -------------------------------------------------------------------------
+    match /admins/{uid} {
+      allow read: if isAdmin();
+      allow write: if false; // Only manageable via internal bootstrap or console for maximum safety
+    }
+  }
+}

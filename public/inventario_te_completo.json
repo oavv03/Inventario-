@@ -1,0 +1,18 @@
+[
+  { "cta": "1204", "placa": "123620", "descripcion": "AMPLI. SEÑAL DE E. COMUNICACION", "marca": "TERADEK", "modelo": "BOLT 4KLT750", "serie": "220201725", "valorReal": 1552.86 },
+  { "cta": "1204", "placa": "123621", "descripcion": "AMPLI. SEÑAL DE E. COMUNICACION", "marca": "TERADEK", "modelo": "BOLT 4KLT750", "serie": "220201744", "valorReal": 1552.86 },
+  { "cta": "1204", "placa": "123622", "descripcion": "AMPLI. SEÑAL DE E. COMUNICACION", "marca": "TERADEK", "modelo": "BOLT 4KLT750", "serie": "220201727", "valorReal": 1552.86 },
+  { "cta": "1204", "placa": "122786", "descripcion": "APA. TELECOM. MICROFONO Y BOCINA", "marca": "SENNHEISER", "modelo": "EW100 G4", "serie": "4429049459", "valorReal": 579.39 },
+  { "cta": "1204", "placa": "123616", "descripcion": "APA. TELECOM. MICROFONO Y BOCINA", "marca": "SONY", "modelo": "UTX-B40", "serie": "100419", "valorReal": 504.00 },
+  { "cta": "1204", "placa": "123617", "descripcion": "APA. TELECOM. MICROFONO Y BOCINA", "marca": "SONY", "modelo": "UTX-B40", "serie": "100418", "valorReal": 1.00 },
+  { "cta": "236", "placa": "33041", "descripcion": "ARCHIVADOR LATERAL", "marca": "DECOMETAL", "modelo": "S/M", "serie": "S/S", "valorReal": 1.00 },
+  { "cta": "55", "placa": "A16304", "descripcion": "BATERIA DE RESPALDO", "marca": "FORZA", "modelo": "FX1500 LCD", "serie": "200962500354", "valorReal": 531.32 },
+  { "cta": "1204", "placa": "123654", "descripcion": "CAMARA DE CONTACTO, FOTOGRAFIA, MICROFILME", "marca": "CANON", "modelo": "EOS ED MARK", "serie": "522038003015", "valorReal": 1779.75 },
+  { "cta": "235", "placa": "92014", "descripcion": "CAMARA DIGITAL", "marca": "CANON", "modelo": "REBEL T3", "serie": "272074012966", "valorReal": 1.00 },
+  { "cta": "233", "placa": "96597", "descripcion": "CAMIONETA 4x4", "marca": "TOYOTA", "modelo": "FORTUNER", "serie": "MR0YZ59GX01127615", "valorReal": 790.54 },
+  { "cta": "235", "placa": "115728", "descripcion": "COMPUTADOR", "marca": "HP", "modelo": "ELITEDESK 705G2", "serie": "MXL73322BS", "valorReal": 38.77 },
+  { "cta": "1204", "placa": "119567", "descripcion": "COMPUTADORA DE ESCRITORIO", "marca": "APPLE", "modelo": "A1862", "serie": "C02VQ48MHX87", "valorReal": 1039.52 },
+  { "cta": "1204", "placa": "123108", "descripcion": "COMPUTADORA DE ESCRITORIO", "marca": "S/M", "modelo": "1", "serie": "TE00001", "valorReal": 469.39 },
+  { "cta": "235", "placa": "118901", "descripcion": "COMPUTADORA PORTATIL", "marca": "LENOVO", "modelo": "THINKPAD", "serie": "PF18RD9T", "valorReal": 433.26 },
+  { "cta": "1204", "placa": "123648", "descripcion": "TELEVISOR", "marca": "SAMSUNG", "modelo": "UB75TU7000P", "serie": "09NM3CBR200147", "valorReal": 868.16 }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "cta": "1204",
+    "placa": "123620",
+    "descripcion": "AMPLI. DE SEÑAL DE E. COMUNICACION",
+    "marca": "TERADEK",
+    "modelo": "BOLT 4KLT750",
+    "serie": "220201725",
+    "valorReal": 504.00
+  },
+  {
+    "cta": "1204",
+    "placa": "123621",
+    "descripcion": "AMPLI. DE SEÑAL DE E. COMUNICACION",
+    "marca": "TERADEK",
+    "modelo": "BOLT 4KLT750",
+    "serie": "220201744",
+    "valorReal": 504.00
+  },
+  {
+    "cta": "55",
+    "placa": "A17158",
+    "descripcion": "AMPLI. DE SEÑAL DE E. COMUNICACION",
+    "marca": "NOWBOTUCH",
+    "modelo": "S/M",
+    "serie": "S/S",
+    "valorReal": 110.62
+  }
+]

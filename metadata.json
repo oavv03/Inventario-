@@ -1,0 +1,6 @@
+{
+  "name": "SistInven - Sistema de Inventario Patrimonial",
+  "description": "Un sistema de gestión de inventario para bienes patrimoniales con panel de administración para actualización de datos y seguimiento de depreciación.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["REACH_INVENTORY_SYSTEM", "ADMIN_DASHBOARD"]
+}
