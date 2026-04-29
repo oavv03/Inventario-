@@ -50,18 +50,6 @@ export function Layout({ user }: LayoutProps) {
               Gestión Admin
             </Link>
           )}
-
-          <div className="pt-4 mt-4 border-t border-gray-800/50">
-            <p className="px-3 text-[10px] uppercase font-bold text-gray-600 tracking-widest mb-4">Recursos</p>
-            <a href="#" className="flex items-center gap-3 p-3 text-gray-400 hover:bg-gray-800 rounded-lg text-sm transition-colors font-medium">
-              <FileText className="w-4 h-4" />
-              Reportes
-            </a>
-            <a href="#" className="flex items-center gap-3 p-3 text-gray-400 hover:bg-gray-800 rounded-lg text-sm transition-colors font-medium">
-              <Settings className="w-4 h-4" />
-              Configuración
-            </a>
-          </div>
         </nav>
 
         {user && (

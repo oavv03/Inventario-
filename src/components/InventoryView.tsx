@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { InventoryItem } from '../types';
-import { Search, Filter, ArrowUpDown, ChevronLeft, ChevronRight, Box, Package, Archive, AlertCircle } from 'lucide-react';
+import { Search, Filter, ArrowUpDown, ChevronLeft, ChevronRight, Box, Package, Archive, AlertCircle, Camera, Eye, X } from 'lucide-react';
 import { formatCurrency, formatDate, cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -14,6 +14,7 @@ export function InventoryView() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const itemsPerPage = 12;
 
   useEffect(() => {
@@ -83,12 +84,38 @@ export function InventoryView() {
           <div className="mt-2 text-[10px] text-amber-500 font-mono">Valor Acumulado</div>
         </div>
 
-        <div className="bg-[#1A1D23] p-5 rounded-2xl border border-gray-800 shadow-sm border-dashed opacity-50 hidden lg:block">
-          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2">Último Registro</p>
-          <p className="text-3xl font-light text-white truncate leading-none"># {items[0]?.placa || '---'}</p>
-          <div className="mt-2 text-[10px] text-gray-400 font-mono">Identificador Placa</div>
+        <div className="bg-[#1A1D23] p-5 rounded-2xl border border-gray-800 shadow-sm border-dashed lg:block">
+          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2 flex items-center gap-2">
+            <Camera className="w-3 h-3 text-indigo-400" />
+            Con Foto
+          </p>
+          <p className="text-3xl font-light text-white leading-none">{items.filter(i => i.imageUrl).length}</p>
+          <div className="mt-2 text-[10px] text-gray-400 font-mono">Evidencia Registrada</div>
         </div>
       </section>
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm" onClick={() => setSelectedImage(null)}>
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-4xl w-full aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img src={selectedImage} alt="Evidencia del activo" className="w-full h-full object-contain bg-black" />
+              <button 
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/80 rounded-full text-white"
+              >
+                 <X className="w-5 h-5" />
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Main Container */}
       <section className="bg-[#1A1D23] rounded-2xl border border-gray-800 flex flex-col shadow-xl overflow-hidden min-h-[600px]">
@@ -165,9 +192,20 @@ export function InventoryView() {
                   >
                     <td className="px-6 py-4 font-mono text-[11px] text-gray-500">{item.cta}</td>
                     <td className="px-6 py-4">
-                      <span className="bg-gray-800 text-gray-300 px-2 py-1 rounded-md text-[10px] font-bold border border-gray-700 font-mono">
-                        {item.placa}
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className="bg-gray-800 text-gray-300 px-2 py-1 rounded-md text-[10px] font-bold border border-gray-700 font-mono">
+                          {item.placa}
+                        </span>
+                        {item.imageUrl && (
+                          <button 
+                            onClick={() => setSelectedImage(item.imageUrl!)}
+                            className="p-1 bg-indigo-950/30 text-indigo-400 rounded-md border border-indigo-900/30 hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
+                            title="Ver Foto"
+                          >
+                             <Camera className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="max-w-xs truncate font-medium text-white group-hover:text-teal-400 transition-colors">

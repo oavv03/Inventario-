@@ -6,18 +6,22 @@ import { Upload, Trash2, CheckCircle2, AlertTriangle, RefreshCcw, FileSpreadshee
 import { formatCurrency, cn } from '../../lib/utils';
 import { BulkUpload } from './BulkUpload';
 import { ItemEditor } from './ItemEditor';
-import { Search as SearchIcon } from 'lucide-react';
+import { AddAsset } from './AddAsset';
+import { AssetVerification } from './AssetVerification';
+import { FindingList } from './FindingList';
+import { Search as SearchIcon, Plus, Camera, Box, Package } from 'lucide-react';
 
 import { handleFirestoreError } from '../../lib/errorHandlers';
 
 export function AdminDashboard() {
   const [isUploading, setIsUploading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'idle' | 'bulk' | 'edit'>('idle');
-  const [summary, setSummary] = useState<{ total: number; ubicados: number; noUbicados: number; sustentados: number; latest: InventoryItem | null }>({ 
+  const [activeTab, setActiveTab] = useState<'idle' | 'bulk' | 'edit' | 'add' | 'verify' | 'findings'>('idle');
+  const [summary, setSummary] = useState<{ total: number; ubicados: number; noUbicados: number; sustentados: number; findings: number; latest: InventoryItem | null }>({ 
     total: 0, 
     ubicados: 0, 
     noUbicados: 0, 
     sustentados: 0,
+    findings: 0,
     latest: null 
   });
 
@@ -29,6 +33,7 @@ export function AdminDashboard() {
       const ubicadosCount = items.filter(i => i.estadoCarga === 'ubicado').length;
       const noUbicadosCount = items.filter(i => i.estadoCarga === 'no-ubicado').length;
       const sustentadosCount = items.filter(i => i.estadoCarga === 'sustentado').length;
+      const findingsCount = items.filter(i => i.isFinding).length;
       
       const q = query(collection(db, 'inventory'), orderBy('updatedAt', 'desc'), limit(1));
       const latestSnap = await getDocs(q);
@@ -38,6 +43,7 @@ export function AdminDashboard() {
         ubicados: ubicadosCount,
         noUbicados: noUbicadosCount,
         sustentados: sustentadosCount,
+        findings: findingsCount,
         latest: latestSnap.docs[0]?.data() as InventoryItem || null
       });
     } catch (err: any) {
@@ -70,7 +76,7 @@ export function AdminDashboard() {
   return (
     <div className="space-y-10 animate-in slide-in-from-bottom-4 duration-500">
       {/* Header */}
-      <section className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-gray-800 pb-8">
+      <section className="flex flex-col items-start gap-8 border-b border-gray-800 pb-8">
         <div>
           <h2 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
              <ShieldCheck className="w-8 h-8 text-teal-500" />
@@ -79,7 +85,7 @@ export function AdminDashboard() {
           <p className="text-[10px] font-mono text-gray-500 uppercase tracking-[0.3em] mt-2">Control Maestro de Inventario Patrimonial</p>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
            <button 
              onClick={fetchStats}
              className="p-2.5 bg-gray-800 border border-gray-700 text-gray-400 rounded-xl hover:text-white hover:border-gray-500 transition-all shadow-sm"
@@ -87,6 +93,45 @@ export function AdminDashboard() {
            >
              <RefreshCcw className="w-4 h-4" />
            </button>
+
+           <button 
+            onClick={() => setActiveTab(activeTab === 'verify' ? 'idle' : 'verify')}
+            className={cn(
+              "text-xs font-bold uppercase tracking-widest px-6 py-2.5 rounded-xl border transition-all flex items-center gap-3 shadow-lg shadow-indigo-900/10",
+              activeTab === 'verify'
+                ? "bg-indigo-600 border-indigo-500 text-white" 
+                : "bg-gray-800 border-gray-700 text-gray-300 hover:text-white"
+            )}
+          >
+            <Camera className="w-4 h-4" />
+            {activeTab === 'verify' ? 'Cerrar Hallazgo' : 'Procesar Hallazgo'}
+          </button>
+
+           <button 
+            onClick={() => setActiveTab(activeTab === 'findings' ? 'idle' : 'findings')}
+            className={cn(
+              "text-xs font-bold uppercase tracking-widest px-6 py-2.5 rounded-xl border transition-all flex items-center gap-3 shadow-lg shadow-teal-900/10",
+              activeTab === 'findings'
+                ? "bg-teal-600 border-teal-500 text-white" 
+                : "bg-gray-800 border-gray-700 text-gray-300 hover:text-white"
+            )}
+          >
+            <Package className="w-4 h-4" />
+            {activeTab === 'findings' ? 'Cerrar Log' : 'Ver Hallazgos'}
+          </button>
+
+           <button 
+            onClick={() => setActiveTab(activeTab === 'add' ? 'idle' : 'add')}
+            className={cn(
+              "text-xs font-bold uppercase tracking-widest px-6 py-2.5 rounded-xl border transition-all flex items-center gap-3 shadow-lg shadow-teal-900/10",
+              activeTab === 'add'
+                ? "bg-teal-600 border-teal-500 text-white" 
+                : "bg-gray-800 border-gray-700 text-gray-300 hover:text-white"
+            )}
+          >
+            <Plus className="w-4 h-4" />
+            {activeTab === 'add' ? 'Cerrar Registro' : 'Añadir Activo'}
+          </button>
 
            <button 
             onClick={() => setActiveTab(activeTab === 'edit' ? 'idle' : 'edit')}
@@ -106,7 +151,7 @@ export function AdminDashboard() {
             className={cn(
               "text-xs font-bold uppercase tracking-widest px-6 py-2.5 rounded-xl border transition-all flex items-center gap-3 shadow-lg shadow-teal-900/10",
               activeTab === 'bulk'
-                ? "bg-teal-600 border-teal-500 text-white" 
+                ? "bg-indigo-600 border-indigo-500 text-white" 
                 : "bg-gray-800 border-gray-700 text-gray-300 hover:text-white"
             )}
           >
@@ -156,6 +201,16 @@ export function AdminDashboard() {
           </div>
         </div>
 
+        <div className="bg-[#1A1D23] p-6 rounded-2xl border border-gray-800 shadow-xl relative overflow-hidden group">
+           <div className="flex items-center gap-2 mb-3">
+              <div className="w-1.5 h-1.5 bg-teal-500 rounded-full" />
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest leading-none">Hallazgos</p>
+           </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-4xl font-light text-white">{summary.findings}</span>
+          </div>
+        </div>
+
         <div className="bg-[#1A1D23] p-6 rounded-2xl border border-gray-800 shadow-xl relative border-l-[4px] border-l-rose-600/50">
           <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-3">Acciones</p>
           <button 
@@ -177,6 +232,12 @@ export function AdminDashboard() {
           <BulkUpload onComplete={() => { fetchStats(); setActiveTab('idle'); }} />
         ) : activeTab === 'edit' ? (
           <ItemEditor />
+        ) : activeTab === 'add' ? (
+          <AddAsset />
+        ) : activeTab === 'verify' ? (
+          <AssetVerification />
+        ) : activeTab === 'findings' ? (
+          <FindingList />
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-20 text-center space-y-4">
              <div className="w-20 h-20 bg-gray-800/50 rounded-3xl border border-gray-700/50 flex items-center justify-center mb-4">

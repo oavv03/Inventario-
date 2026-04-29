@@ -12,6 +12,9 @@ export interface InventoryItem {
   valorReal: number;
   ubicacion: string;
   estadoCarga?: 'ubicado' | 'no-ubicado' | 'sustentado';
+  imageUrl?: string;
+  isFinding?: boolean;
+  findingDate?: any;
   updatedAt?: any;
 }
 

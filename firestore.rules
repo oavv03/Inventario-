@@ -43,7 +43,8 @@ service cloud.firestore {
         // Action: Generic Edit
         incoming().diff(existing()).affectedKeys().hasOnly([
           'cta', 'placa', 'descripcion', 'marca', 'modelo', 'serie', 
-          'fecha', 'valorAdquisicion', 'depreciacion', 'valorReal', 'ubicacion', 'updatedAt'
+          'fecha', 'valorAdquisicion', 'depreciacion', 'valorReal', 'ubicacion', 
+          'estadoCarga', 'imageUrl', 'isFinding', 'findingDate', 'updatedAt'
         ])
       );
       allow delete: if isAdmin();
@@ -51,9 +52,13 @@ service cloud.firestore {
 
     function isValidInventoryItem(data) {
       return data.keys().hasAll(['placa', 'descripcion']) &&
-             data.placa is string && 
-             data.descripcion is string && 
+             data.placa is string && data.placa.size() > 0 &&
+             data.descripcion is string && data.descripcion.size() > 0 &&
              (!('valorReal' in data) || data.valorReal is number || data.valorReal is float) &&
+             (!('estadoCarga' in data) || data.estadoCarga in ['ubicado', 'no-ubicado', 'sustentado']) &&
+             (!('imageUrl' in data) || data.imageUrl is string) &&
+             (!('isFinding' in data) || data.isFinding is bool) &&
+             (!('findingDate' in data) || data.findingDate == request.time) &&
              (!('updatedAt' in data) || data.updatedAt == request.time);
     }
 
